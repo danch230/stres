@@ -3,8 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <title>Тест на уровень стресса перед ЕГЭ</title>
-    <!-- Подключаем файл стилей -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Встроенный CSS -->
+    <style>
+        /* Общие стили */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Стили для главной страницы */
+        .landing-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: url('https://via.placeholder.com/1920x1080?text=Exam+Background') no-repeat center center fixed;
+            background-size: cover;
+            filter: grayscale(100%); /* Чёрно-белый эффект */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Затемнение для читаемости текста */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .overlay h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .overlay p {
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .image-gallery img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: 0 10px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
+
+        #start-btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background-color: #fff;
+            color: #000;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #start-btn:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Стили для страницы с тестом */
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+            display: none; /* Скрыта по умолчанию */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .question-block {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.5s ease-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .answers {
+            list-style: none;
+            padding: 0;
+        }
+
+        .answer {
+            margin-bottom: 10px;
+        }
+
+        .answer label {
+            display: block;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            color: #333;
+        }
+
+        .answer input[type="radio"] {
+            display: none;
+        }
+
+        .answer label:hover {
+            background: #d5d5d5;
+        }
+
+        .answer input[type="radio"]:checked + label {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        #submit-btn {
+            display: block;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background-color: #ff9800;
+            color: #fff;
+            transition: background-color 0.3s;
+            margin: 20px auto 0;
+        }
+
+        #submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #submit-btn:hover:not(:disabled) {
+            background-color: #e68900;
+        }
+
+        #result-container {
+            display: none;
+            margin-top: 40px;
+            animation: fadeIn 1s ease-out;
+            text-align: center;
+        }
+
+        #result {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        #stress-score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Стиль для контейнера с советом */
+        #advice-container {
+            background-color: #fff;
+            color: #333;
+            padding: 20px;
+            margin: 0 auto 30px;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #advice {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+
+        /* Стили для кнопки "Вернуться на главную" */
+        #retry-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background-color: #29b6f6;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        #retry-btn:hover {
+            background-color: #0288d1;
+        }
+
+        /* Стили для шкалы стресса */
+        #stress-scale {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 20px;
+            margin: 0 5px;
+            background-color: #B0BEC5;
+            transition: background-color 0.3s;
+        }
+
+        .bar.active {
+            background-color: #ff3d00;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -24,7 +270,7 @@
     </div>
 
     <!-- Страница с тестом -->
-    <div id="test-container" class="test-container" style="display: none;">
+    <div id="test-container" class="test-container">
         <h1>Тест на уровень стресса перед ЕГЭ</h1>
         <form id="quiz">
             <!-- Вопросы будут добавлены здесь с помощью JavaScript -->
@@ -46,569 +292,326 @@
         </div>
     </div>
 
-    <!-- Подключаем файл JavaScript -->
-    <script src="script.js"></script>
+    <!-- Встроенный JavaScript -->
+    <script>
+        // Получаем ссылки на элементы
+        const landingContainer = document.getElementById('landing-container');
+        const startBtn = document.getElementById('start-btn');
+
+        const testContainer = document.getElementById('test-container');
+        const quizForm = document.getElementById('quiz');
+        const submitBtn = document.getElementById('submit-btn');
+
+        const resultContainer = document.getElementById('result-container');
+        const resultEl = document.getElementById('result');
+        const adviceEl = document.getElementById('advice');
+        const stressScaleEl = document.getElementById('stress-scale');
+        const stressScoreEl = document.getElementById('stress-score');
+        const retryBtn = document.getElementById('retry-btn');
+
+        // Обработчик для кнопки "Перейти к тесту"
+        startBtn.addEventListener('click', function() {
+            landingContainer.style.display = 'none';
+            testContainer.style.display = 'block';
+        });
+
+        // Вопросы и ответы
+        const questions = [
+            {
+                question: "1. Как часто вы думаете об ЕГЭ?",
+                answers: [
+                    { text: "Постоянно", points: 4 },
+                    { text: "Часто", points: 3 },
+                    { text: "Иногда", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Никогда", points: 0 }
+                ]
+            },
+            {
+                question: "2. Чувствуете ли вы тревогу перед экзаменом?",
+                answers: [
+                    { text: "Очень сильную", points: 4 },
+                    { text: "Сильную", points: 3 },
+                    { text: "Умеренную", points: 2 },
+                    { text: "Слабую", points: 1 },
+                    { text: "Не чувствую", points: 0 }
+                ]
+            },
+            {
+                question: "3. Как вы спите в последнее время?",
+                answers: [
+                    { text: "Плохо, часто просыпаюсь", points: 4 },
+                    { text: "Сплю мало часов", points: 3 },
+                    { text: "Сон немного нарушен", points: 2 },
+                    { text: "Сплю нормально", points: 1 },
+                    { text: "Сплю отлично", points: 0 }
+                ]
+            },
+            {
+                question: "4. Есть ли у вас изменения аппетита?",
+                answers: [
+                    { text: "Совсем не ем", points: 4 },
+                    { text: "Ем меньше обычного", points: 3 },
+                    { text: "Аппетит немного снизился", points: 2 },
+                    { text: "Аппетит без изменений", points: 1 },
+                    { text: "Аппетит хороший", points: 0 }
+                ]
+            },
+            {
+                question: "5. Испытываете ли вы физические симптомы стресса (головные боли, усталость)?",
+                answers: [
+                    { text: "Да, постоянно", points: 4 },
+                    { text: "Часто", points: 3 },
+                    { text: "Иногда", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Нет, не испытываю", points: 0 }
+                ]
+            },
+            {
+                question: "6. Чувствуете ли вы себя подавленным или раздражительным?",
+                answers: [
+                    { text: "Да, очень сильно", points: 4 },
+                    { text: "Довольно сильно", points: 3 },
+                    { text: "Умеренно", points: 2 },
+                    { text: "Немного", points: 1 },
+                    { text: "Нет, не чувствую", points: 0 }
+                ]
+            },
+            {
+                question: "7. Как часто вы отвлекаетесь на учебе?",
+                answers: [
+                    { text: "Постоянно", points: 4 },
+                    { text: "Часто", points: 3 },
+                    { text: "Иногда", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Никогда", points: 0 }
+                ]
+            },
+            {
+                question: "8. Как вы справляетесь со сложными задачами?",
+                answers: [
+                    { text: "Паника и стресс", points: 4 },
+                    { text: "Тяжело, но пытаюсь", points: 3 },
+                    { text: "Иногда испытываю трудности", points: 2 },
+                    { text: "В целом нормально", points: 1 },
+                    { text: "Легко справляюсь", points: 0 }
+                ]
+            },
+            {
+                question: "9. Испытываете ли вы поддержку со стороны близких?",
+                answers: [
+                    { text: "Нет, совсем нет", points: 4 },
+                    { text: "Мало поддержки", points: 3 },
+                    { text: "Иногда чувствую поддержку", points: 2 },
+                    { text: "Поддержка есть", points: 1 },
+                    { text: "Да, всегда поддерживают", points: 0 }
+                ]
+            },
+            {
+                question: "10. Как часто вы занимаетесь физической активностью?",
+                answers: [
+                    { text: "Никогда", points: 4 },
+                    { text: "Очень редко", points: 3 },
+                    { text: "Иногда", points: 2 },
+                    { text: "Часто", points: 1 },
+                    { text: "Регулярно", points: 0 }
+                ]
+            },
+            {
+                question: "11. Чувствуете ли вы, что у вас не хватает времени на подготовку?",
+                answers: [
+                    { text: "Всегда", points: 4 },
+                    { text: "Часто", points: 3 },
+                    { text: "Иногда", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Нет, мне хватает времени", points: 0 }
+                ]
+            },
+            {
+                question: "12. Как вы реагируете на неудачи в подготовке?",
+                answers: [
+                    { text: "Очень сильно переживаю", points: 4 },
+                    { text: "Довольно сильно расстраиваюсь", points: 3 },
+                    { text: "Немного огорчаюсь", points: 2 },
+                    { text: "Стараюсь не обращать внимания", points: 1 },
+                    { text: "Принимаю и двигаюсь дальше", points: 0 }
+                ]
+            },
+            {
+                question: "13. Испытываете ли вы желание отложить подготовку?",
+                answers: [
+                    { text: "Да, постоянно откладываю", points: 4 },
+                    { text: "Часто прокрастинирую", points: 3 },
+                    { text: "Иногда откладываю", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Нет, не откладываю", points: 0 }
+                ]
+            },
+            {
+                question: "14. Как вы оцениваете свою концентрацию во время учебы?",
+                answers: [
+                    { text: "Очень плохая", points: 4 },
+                    { text: "Плохая", points: 3 },
+                    { text: "Средняя", points: 2 },
+                    { text: "Хорошая", points: 1 },
+                    { text: "Отличная", points: 0 }
+                ]
+            },
+            {
+                question: "15. Испытываете ли вы сомнения в своих силах?",
+                answers: [
+                    { text: "Постоянно сомневаюсь", points: 4 },
+                    { text: "Часто сомневаюсь", points: 3 },
+                    { text: "Иногда сомневаюсь", points: 2 },
+                    { text: "Редко", points: 1 },
+                    { text: "Нет, уверен в себе", points: 0 }
+                ]
+            }
+        ];
+
+        function buildQuiz() {
+            quizForm.innerHTML = ''; // Очистим форму перед построением (на случай повторного прохождения)
+            questions.forEach((q, questionIndex) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+
+                const questionTitle = document.createElement('div');
+                questionTitle.classList.add('question');
+                questionTitle.textContent = q.question;
+                questionBlock.appendChild(questionTitle);
+
+                const answersList = document.createElement('ul');
+                answersList.classList.add('answers');
+
+                q.answers.forEach((answer, answerIndex) => {
+                    const answerItem = document.createElement('li');
+                    answerItem.classList.add('answer');
+
+                    const answerId = `question${questionIndex}_answer${answerIndex}`;
+
+                    const answerInput = document.createElement('input');
+                    answerInput.type = 'radio';
+                    answerInput.name = `question${questionIndex}`;
+                    answerInput.id = answerId;
+                    answerInput.value = answer.points;
+                    answerInput.required = true;
+
+                    const answerLabel = document.createElement('label');
+                    answerLabel.htmlFor = answerId;
+                    answerLabel.textContent = answer.text;
+
+                    answerItem.appendChild(answerInput);
+                    answerItem.appendChild(answerLabel);
+                    answersList.appendChild(answerItem);
+
+                    // Добавляем обработчик события для каждого радио-инпута
+                    answerInput.addEventListener('change', updateSubmitButtonState);
+                });
+
+                questionBlock.appendChild(answersList);
+                quizForm.appendChild(questionBlock);
+            });
+        }
+
+        function updateSubmitButtonState() {
+            const answeredQuestions = new Set();
+            const radioInputs = document.querySelectorAll('input[type="radio"]:checked');
+            radioInputs.forEach(input => {
+                answeredQuestions.add(input.name);
+            });
+            if (answeredQuestions.size === questions.length) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        function calculateResults(event) {
+            event.preventDefault();
+            let totalPoints = 0;
+            const formData = new FormData(quizForm);
+
+            for (let [key, value] of formData.entries()) {
+                totalPoints += parseInt(value);
+            }
+
+            displayResults(totalPoints);
+        }
+
+        function displayResults(totalPoints) {
+            quizForm.style.display = 'none';
+            submitBtn.style.display = 'none';
+            resultContainer.style.display = 'block';
+
+            let message = '';
+            let advice = '';
+
+            // Расчет уровня стресса от 0 до 10 (10 - максимальный стресс)
+            let stressLevel = Math.round((totalPoints / (questions.length * 4)) * 10);
+
+            // Создаем шкалу стресса
+            stressScaleEl.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                bar.style.height = `${i * 15}px`;
+                if (i <= stressLevel) {
+                    bar.classList.add('active');
+                }
+                stressScaleEl.appendChild(bar);
+            }
+
+            stressScoreEl.textContent = `Уровень стресса: ${stressLevel}/10`;
+
+            if (stressLevel <= 3) {
+                message = 'У вас низкий уровень стресса перед ЕГЭ.';
+                advice = 'Отлично! Продолжайте в том же духе. Поддерживайте свой позитивный настрой и сохраняйте баланс между учебой и отдыхом.';
+            } else if (stressLevel <= 6) {
+                message = 'У вас средний уровень стресса перед ЕГЭ.';
+                advice = 'Вы справляетесь неплохо, но стоит уделить внимание методам релаксации. Попробуйте техники глубокого дыхания, физические упражнения или хобби для снятия напряжения.';
+            } else if (stressLevel <= 8) {
+                message = 'У вас высокий уровень стресса перед ЕГЭ.';
+                advice = 'Важно обратить внимание на свое эмоциональное состояние. Рекомендуется обратиться за поддержкой к близким или специалистам, а также использовать методы управления стрессом, такие как медитация или йога.';
+            } else {
+                message = 'У вас очень высокий уровень стресса перед ЕГЭ.';
+                advice = 'Пожалуйста, не откладывайте и обратитесь за профессиональной помощью. Ваше здоровье и благополучие важнее всего.';
+            }
+
+            resultEl.textContent = message;
+            adviceEl.textContent = advice;
+        }
+
+        // Функция для возврата на главную страницу
+        function returnToMain() {
+            // Скрыть контейнер с результатами и тест
+            resultContainer.style.display = 'none';
+            testContainer.style.display = 'none';
+
+            // Показать главную страницу
+            landingContainer.style.display = 'block';
+
+            // Сбросить форму
+            quizForm.reset();
+
+            // Сбросить состояние кнопки
+            submitBtn.disabled = true;
+
+            // Показать форму и кнопку
+            quizForm.style.display = 'block';
+            submitBtn.style.display = 'block';
+
+            // Обновить состояние кнопки
+            updateSubmitButtonState();
+        }
+
+        // Инициализация теста
+        buildQuiz();
+        // Инициализируем состояние кнопки при загрузке страницы
+        updateSubmitButtonState();
+        submitBtn.addEventListener('click', calculateResults);
+        // Добавляем обработчик события для кнопки "Вернуться на главную"
+        retryBtn.addEventListener('click', returnToMain);
+    </script>
 
 </body>
 </html>
-/* Общие стили */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-}
-
-/* Стили для главной страницы */
-.landing-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background: url('https://via.placeholder.com/1920x1080?text=Exam+Background') no-repeat center center fixed;
-    background-size: cover;
-    filter: grayscale(100%); /* Чёрно-белый эффект */
-}
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Затемнение для читаемости текста */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: #fff;
-    padding: 20px;
-}
-
-.overlay h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-}
-
-.overlay p {
-    font-size: 24px;
-    margin-bottom: 40px;
-}
-
-.image-gallery {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-
-.image-gallery img {
-    width: 300px;
-    height: 200px;
-    object-fit: cover;
-    margin: 0 10px;
-    border: 2px solid #fff;
-    border-radius: 10px;
-}
-
-#start-btn {
-    padding: 15px 30px;
-    font-size: 20px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    background-color: #fff;
-    color: #000;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-#start-btn:hover {
-    background-color: #000;
-    color: #fff;
-}
-
-/* Стили для страницы с тестом */
-.test-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    background-color: #f9f9f9;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-.question-block {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    animation: fadeInUp 0.5s ease-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.question {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.answers {
-    list-style: none;
-    padding: 0;
-}
-
-.answer {
-    margin-bottom: 10px;
-}
-
-.answer label {
-    display: block;
-    padding: 10px;
-    background: #e0e0e0;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #333;
-}
-
-.answer input[type="radio"] {
-    display: none;
-}
-
-.answer label:hover {
-    background: #d5d5d5;
-}
-
-.answer input[type="radio"]:checked + label {
-    background: #4caf50;
-    color: #fff;
-}
-
-#submit-btn {
-    display: block;
-    padding: 15px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    background-color: #ff9800;
-    color: #fff;
-    transition: background-color 0.3s;
-    margin: 20px auto 0;
-}
-
-#submit-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-#submit-btn:hover:not(:disabled) {
-    background-color: #e68900;
-}
-
-#result-container {
-    display: none;
-    margin-top: 40px;
-    animation: fadeIn 1s ease-out;
-    text-align: center;
-}
-
-#result {
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-
-#stress-score {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Стиль для контейнера с советом */
-#advice-container {
-    background-color: #fff;
-    color: #333;
-    padding: 20px;
-    margin: 0 auto 30px;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#advice {
-    font-size: 20px;
-    line-height: 1.5;
-}
-
-/* Стили для кнопки "Вернуться на главную" */
-#retry-btn {
-    padding: 15px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    background-color: #29b6f6;
-    color: #fff;
-    transition: background-color 0.3s;
-}
-
-#retry-btn:hover {
-    background-color: #0288d1;
-}
-
-/* Стили для шкалы стресса */
-#stress-scale {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 200px;
-    margin-bottom: 20px;
-}
-
-.bar {
-    width: 20px;
-    margin: 0 5px;
-    background-color: #B0BEC5;
-    transition: background-color 0.3s;
-}
-
-.bar.active {
-    background-color: #ff3d00;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-// Получаем ссылки на элементы
-const landingContainer = document.getElementById('landing-container');
-const startBtn = document.getElementById('start-btn');
-
-const testContainer = document.getElementById('test-container');
-const quizForm = document.getElementById('quiz');
-const submitBtn = document.getElementById('submit-btn');
-
-const resultContainer = document.getElementById('result-container');
-const resultEl = document.getElementById('result');
-const adviceEl = document.getElementById('advice');
-const stressScaleEl = document.getElementById('stress-scale');
-const stressScoreEl = document.getElementById('stress-score');
-const retryBtn = document.getElementById('retry-btn');
-
-// Обработчик для кнопки "Перейти к тесту"
-startBtn.addEventListener('click', function() {
-    landingContainer.style.display = 'none';
-    testContainer.style.display = 'block';
-});
-
-// Вопросы и ответы
-const questions = [
-    {
-        question: "1. Как часто вы думаете об ЕГЭ?",
-        answers: [
-            { text: "Постоянно", points: 4 },
-            { text: "Часто", points: 3 },
-            { text: "Иногда", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Никогда", points: 0 }
-        ]
-    },
-    {
-        question: "2. Чувствуете ли вы тревогу перед экзаменом?",
-        answers: [
-            { text: "Очень сильную", points: 4 },
-            { text: "Сильную", points: 3 },
-            { text: "Умеренную", points: 2 },
-            { text: "Слабую", points: 1 },
-            { text: "Не чувствую", points: 0 }
-        ]
-    },
-    {
-        question: "3. Как вы спите в последнее время?",
-        answers: [
-            { text: "Плохо, часто просыпаюсь", points: 4 },
-            { text: "Сплю мало часов", points: 3 },
-            { text: "Сон немного нарушен", points: 2 },
-            { text: "Сплю нормально", points: 1 },
-            { text: "Сплю отлично", points: 0 }
-        ]
-    },
-    {
-        question: "4. Есть ли у вас изменения аппетита?",
-        answers: [
-            { text: "Совсем не ем", points: 4 },
-            { text: "Ем меньше обычного", points: 3 },
-            { text: "Аппетит немного снизился", points: 2 },
-            { text: "Аппетит без изменений", points: 1 },
-            { text: "Аппетит хороший", points: 0 }
-        ]
-    },
-    {
-        question: "5. Испытываете ли вы физические симптомы стресса (головные боли, усталость)?",
-        answers: [
-            { text: "Да, постоянно", points: 4 },
-            { text: "Часто", points: 3 },
-            { text: "Иногда", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Нет, не испытываю", points: 0 }
-        ]
-    },
-    {
-        question: "6. Чувствуете ли вы себя подавленным или раздражительным?",
-        answers: [
-            { text: "Да, очень сильно", points: 4 },
-            { text: "Довольно сильно", points: 3 },
-            { text: "Умеренно", points: 2 },
-            { text: "Немного", points: 1 },
-            { text: "Нет, не чувствую", points: 0 }
-        ]
-    },
-    {
-        question: "7. Как часто вы отвлекаетесь на учебе?",
-        answers: [
-            { text: "Постоянно", points: 4 },
-            { text: "Часто", points: 3 },
-            { text: "Иногда", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Никогда", points: 0 }
-        ]
-    },
-    {
-        question: "8. Как вы справляетесь со сложными задачами?",
-        answers: [
-            { text: "Паника и стресс", points: 4 },
-            { text: "Тяжело, но пытаюсь", points: 3 },
-            { text: "Иногда испытываю трудности", points: 2 },
-            { text: "В целом нормально", points: 1 },
-            { text: "Легко справляюсь", points: 0 }
-        ]
-    },
-    {
-        question: "9. Испытываете ли вы поддержку со стороны близких?",
-        answers: [
-            { text: "Нет, совсем нет", points: 4 },
-            { text: "Мало поддержки", points: 3 },
-            { text: "Иногда чувствую поддержку", points: 2 },
-            { text: "Поддержка есть", points: 1 },
-            { text: "Да, всегда поддерживают", points: 0 }
-        ]
-    },
-    {
-        question: "10. Как часто вы занимаетесь физической активностью?",
-        answers: [
-            { text: "Никогда", points: 4 },
-            { text: "Очень редко", points: 3 },
-            { text: "Иногда", points: 2 },
-            { text: "Часто", points: 1 },
-            { text: "Регулярно", points: 0 }
-        ]
-    },
-    {
-        question: "11. Чувствуете ли вы, что у вас не хватает времени на подготовку?",
-        answers: [
-            { text: "Всегда", points: 4 },
-            { text: "Часто", points: 3 },
-            { text: "Иногда", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Нет, мне хватает времени", points: 0 }
-        ]
-    },
-    {
-        question: "12. Как вы реагируете на неудачи в подготовке?",
-        answers: [
-            { text: "Очень сильно переживаю", points: 4 },
-            { text: "Довольно сильно расстраиваюсь", points: 3 },
-            { text: "Немного огорчаюсь", points: 2 },
-            { text: "Стараюсь не обращать внимания", points: 1 },
-            { text: "Принимаю и двигаюсь дальше", points: 0 }
-        ]
-    },
-    {
-        question: "13. Испытываете ли вы желание отложить подготовку?",
-        answers: [
-            { text: "Да, постоянно откладываю", points: 4 },
-            { text: "Часто прокрастинирую", points: 3 },
-            { text: "Иногда откладываю", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Нет, не откладываю", points: 0 }
-        ]
-    },
-    {
-        question: "14. Как вы оцениваете свою концентрацию во время учебы?",
-        answers: [
-            { text: "Очень плохая", points: 4 },
-            { text: "Плохая", points: 3 },
-            { text: "Средняя", points: 2 },
-            { text: "Хорошая", points: 1 },
-            { text: "Отличная", points: 0 }
-        ]
-    },
-    {
-        question: "15. Испытываете ли вы сомнения в своих силах?",
-        answers: [
-            { text: "Постоянно сомневаюсь", points: 4 },
-            { text: "Часто сомневаюсь", points: 3 },
-            { text: "Иногда сомневаюсь", points: 2 },
-            { text: "Редко", points: 1 },
-            { text: "Нет, уверен в себе", points: 0 }
-        ]
-    }
-];
-
-function buildQuiz() {
-    quizForm.innerHTML = ''; // Очистим форму перед построением (на случай повторного прохождения)
-    questions.forEach((q, questionIndex) => {
-        const questionBlock = document.createElement('div');
-        questionBlock.classList.add('question-block');
-
-        const questionTitle = document.createElement('div');
-        questionTitle.classList.add('question');
-        questionTitle.textContent = q.question;
-        questionBlock.appendChild(questionTitle);
-
-        const answersList = document.createElement('ul');
-        answersList.classList.add('answers');
-
-        q.answers.forEach((answer, answerIndex) => {
-            const answerItem = document.createElement('li');
-            answerItem.classList.add('answer');
-
-            const answerId = `question${questionIndex}_answer${answerIndex}`;
-
-            const answerInput = document.createElement('input');
-            answerInput.type = 'radio';
-            answerInput.name = `question${questionIndex}`;
-            answerInput.id = answerId;
-            answerInput.value = answer.points;
-            answerInput.required = true;
-
-            const answerLabel = document.createElement('label');
-            answerLabel.htmlFor = answerId;
-            answerLabel.textContent = answer.text;
-
-            answerItem.appendChild(answerInput);
-            answerItem.appendChild(answerLabel);
-            answersList.appendChild(answerItem);
-
-            // Добавляем обработчик события для каждого радио-инпута
-            answerInput.addEventListener('change', updateSubmitButtonState);
-        });
-
-        questionBlock.appendChild(answersList);
-        quizForm.appendChild(questionBlock);
-    });
-}
-
-function updateSubmitButtonState() {
-    const answeredQuestions = new Set();
-    const radioInputs = document.querySelectorAll('input[type="radio"]:checked');
-    radioInputs.forEach(input => {
-        answeredQuestions.add(input.name);
-    });
-    if (answeredQuestions.size === questions.length) {
-        submitBtn.disabled = false;
-    } else {
-        submitBtn.disabled = true;
-    }
-}
-
-function calculateResults(event) {
-    event.preventDefault();
-    let totalPoints = 0;
-    const formData = new FormData(quizForm);
-
-    for (let [key, value] of formData.entries()) {
-        totalPoints += parseInt(value);
-    }
-
-    displayResults(totalPoints);
-}
-
-function displayResults(totalPoints) {
-    quizForm.style.display = 'none';
-    submitBtn.style.display = 'none';
-    resultContainer.style.display = 'block';
-
-    let message = '';
-    let advice = '';
-
-    // Расчет уровня стресса от 0 до 10 (10 - максимальный стресс)
-    let stressLevel = Math.round((totalPoints / (questions.length * 4)) * 10);
-
-    // Создаем шкалу стресса
-    stressScaleEl.innerHTML = '';
-    for (let i = 1; i <= 10; i++) {
-        const bar = document.createElement('div');
-        bar.classList.add('bar');
-        bar.style.height = `${i * 15}px`;
-        if (i <= stressLevel) {
-            bar.classList.add('active');
-        }
-        stressScaleEl.appendChild(bar);
-    }
-
-    stressScoreEl.textContent = `Уровень стресса: ${stressLevel}/10`;
-
-    if (stressLevel <= 3) {
-        message = 'У вас низкий уровень стресса перед ЕГЭ.';
-        advice = 'Отлично! Продолжайте в том же духе. Поддерживайте свой позитивный настрой и сохраняйте баланс между учебой и отдыхом.';
-    } else if (stressLevel <= 6) {
-        message = 'У вас средний уровень стресса перед ЕГЭ.';
-        advice = 'Вы справляетесь неплохо, но стоит уделить внимание методам релаксации. Попробуйте техники глубокого дыхания, физические упражнения или хобби для снятия напряжения.';
-    } else if (stressLevel <= 8) {
-        message = 'У вас высокий уровень стресса перед ЕГЭ.';
-        advice = 'Важно обратить внимание на свое эмоциональное состояние. Рекомендуется обратиться за поддержкой к близким или специалистам, а также использовать методы управления стрессом, такие как медитация или йога.';
-    } else {
-        message = 'У вас очень высокий уровень стресса перед ЕГЭ.';
-        advice = 'Пожалуйста, не откладывайте и обратитесь за профессиональной помощью. Ваше здоровье и благополучие важнее всего.';
-    }
-
-    resultEl.textContent = message;
-    adviceEl.textContent = advice;
-}
-
-// Функция для возврата на главную страницу
-function returnToMain() {
-    // Скрыть контейнер с результатами и тест
-    resultContainer.style.display = 'none';
-    testContainer.style.display = 'none';
-
-    // Показать главную страницу
-    landingContainer.style.display = 'flex';
-
-    // Сбросить форму
-    quizForm.reset();
-
-    // Сбросить состояние кнопки
-    submitBtn.disabled = true;
-
-    // Показать форму и кнопку
-    quizForm.style.display = 'block';
-    submitBtn.style.display = 'block';
-
-    // Обновить состояние кнопки
-    updateSubmitButtonState();
-}
-
-// Инициализация теста
-buildQuiz();
-// Инициализируем состояние кнопки при загрузке страницы
-updateSubmitButtonState();
-submitBtn.addEventListener('click', calculateResults);
-// Добавляем обработчик события для кнопки "Вернуться на главную"
-retryBtn.addEventListener('click', returnToMain);
