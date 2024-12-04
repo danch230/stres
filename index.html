@@ -251,6 +251,8 @@
             }
         }
     </style>
+    <!-- Дополнительные меры безопасности -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
 
@@ -569,49 +571,4 @@
             } else if (stressLevel <= 6) {
                 message = 'У вас средний уровень стресса перед ЕГЭ.';
                 advice = 'Вы справляетесь неплохо, но стоит уделить внимание методам релаксации. Попробуйте техники глубокого дыхания, физические упражнения или хобби для снятия напряжения.';
-            } else if (stressLevel <= 8) {
-                message = 'У вас высокий уровень стресса перед ЕГЭ.';
-                advice = 'Важно обратить внимание на свое эмоциональное состояние. Рекомендуется обратиться за поддержкой к близким или специалистам, а также использовать методы управления стрессом, такие как медитация или йога.';
-            } else {
-                message = 'У вас очень высокий уровень стресса перед ЕГЭ.';
-                advice = 'Пожалуйста, не откладывайте и обратитесь за профессиональной помощью. Ваше здоровье и благополучие важнее всего.';
-            }
-
-            resultEl.textContent = message;
-            adviceEl.textContent = advice;
-        }
-
-        // Функция для возврата на главную страницу
-        function returnToMain() {
-            // Скрыть контейнер с результатами и тест
-            resultContainer.style.display = 'none';
-            testContainer.style.display = 'none';
-
-            // Показать главную страницу
-            landingContainer.style.display = 'block';
-
-            // Сбросить форму
-            quizForm.reset();
-
-            // Сбросить состояние кнопки
-            submitBtn.disabled = true;
-
-            // Показать форму и кнопку
-            quizForm.style.display = 'block';
-            submitBtn.style.display = 'block';
-
-            // Обновить состояние кнопки
-            updateSubmitButtonState();
-        }
-
-        // Инициализация теста
-        buildQuiz();
-        // Инициализируем состояние кнопки при загрузке страницы
-        updateSubmitButtonState();
-        submitBtn.addEventListener('click', calculateResults);
-        // Добавляем обработчик события для кнопки "Вернуться на главную"
-        retryBtn.addEventListener('click', returnToMain);
-    </script>
-
-</body>
-</html>
+            } els
