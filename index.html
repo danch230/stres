@@ -48,19 +48,26 @@
             margin-bottom: 40px;
         }
 
+        /* Обновлённые стили для image-gallery */
         .image-gallery {
             display: flex;
             justify-content: center;
             margin-bottom: 40px;
         }
 
-        .image-gallery img {
+        /* Новые стили для прямоугольников вместо изображений */
+        .image-placeholder {
             width: 300px;
             height: 200px;
-            object-fit: cover;
+            background-color: #ccc; /* Светло-серый фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin: 0 10px;
             border: 2px solid #fff;
             border-radius: 10px;
+            font-size: 24px;
+            color: #333;
         }
 
         #start-btn {
@@ -261,11 +268,11 @@
         <div class="overlay">
             <h1>Добро пожаловать на тест уровня стресса перед ЕГЭ</h1>
             <p>Узнайте свой уровень стресса и получите полезные советы по его снижению.</p>
-            <!-- Добавленные фотографии -->
+            <!-- Обновлённые прямоугольники вместо изображений -->
             <div class="image-gallery">
-                <img src="https://via.placeholder.com/300x200?text=Exam+Preparation+1" alt="Подготовка к экзамену 1">
-                <img src="https://via.placeholder.com/300x200?text=Exam+Preparation+2" alt="Подготовка к экзамену 2">
-                <img src="https://via.placeholder.com/300x200?text=Exam+Preparation+3" alt="Подготовка к экзамену 3">
+                <div class="image-placeholder">фото 1</div>
+                <div class="image-placeholder">фото 2</div>
+                <div class="image-placeholder">фото 3</div>
             </div>
             <button id="start-btn">Перейти к тесту</button>
         </div>
@@ -571,4 +578,49 @@
             } else if (stressLevel <= 6) {
                 message = 'У вас средний уровень стресса перед ЕГЭ.';
                 advice = 'Вы справляетесь неплохо, но стоит уделить внимание методам релаксации. Попробуйте техники глубокого дыхания, физические упражнения или хобби для снятия напряжения.';
-            } els
+            } else if (stressLevel <= 8) {
+                message = 'У вас высокий уровень стресса перед ЕГЭ.';
+                advice = 'Важно обратить внимание на свое эмоциональное состояние. Рекомендуется обратиться за поддержкой к близким или специалистам, а также использовать методы управления стрессом, такие как медитация или йога.';
+            } else {
+                message = 'У вас очень высокий уровень стресса перед ЕГЭ.';
+                advice = 'Пожалуйста, не откладывайте и обратитесь за профессиональной помощью. Ваше здоровье и благополучие важнее всего.';
+            }
+
+            resultEl.textContent = message;
+            adviceEl.textContent = advice;
+        }
+
+        // Функция для возврата на главную страницу
+        function returnToMain() {
+            // Скрыть контейнер с результатами и тест
+            resultContainer.style.display = 'none';
+            testContainer.style.display = 'none';
+
+            // Показать главную страницу
+            landingContainer.style.display = 'block';
+
+            // Сбросить форму
+            quizForm.reset();
+
+            // Сбросить состояние кнопки
+            submitBtn.disabled = true;
+
+            // Показать форму и кнопку
+            quizForm.style.display = 'block';
+            submitBtn.style.display = 'block';
+
+            // Обновить состояние кнопки
+            updateSubmitButtonState();
+        }
+
+        // Инициализация теста
+        buildQuiz();
+        // Инициализируем состояние кнопки при загрузке страницы
+        updateSubmitButtonState();
+        submitBtn.addEventListener('click', calculateResults);
+        // Добавляем обработчик события для кнопки "Вернуться на главную"
+        retryBtn.addEventListener('click', returnToMain);
+    </script>
+
+</body>
+</html>
